@@ -18,14 +18,10 @@ flutter config --enable-web
 flutter pub get
 
 if [[ "${NETLIFY:-false}" == "true" && -z "${API_BASE_URL:-}" ]]; then
-  echo "API_BASE_URL must be configured in Netlify before deploying StudyMate."
-  echo "Example: https://your-studyMate-backend.example.com"
-  exit 1
+  echo "Warning: API_BASE_URL is not configured; StudyMate will use its local fallback service."
+  echo "Set API_BASE_URL in Netlify to connect the deployed Flask backend."
 fi
 
-build_args=(--release)
-if [[ -n "${API_BASE_URL:-}" ]]; then
-  build_args+=("--dart-define=API_BASE_URL=${API_BASE_URL}")
-fi
+build_args=(--release "--dart-define=API_BASE_URL=${API_BASE_URL:-}")
 
 flutter build web "${build_args[@]}"

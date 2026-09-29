@@ -50,7 +50,7 @@ Before the first Netlify deploy, add this environment variable in **Site configu
 API_BASE_URL=https://your-public-backend.example.com
 ```
 
-The value must be the public URL of the separately deployed Flask backend. Do not use `localhost` in Netlify. The build fails deliberately when the production variable is missing so the deployed site cannot silently ship with a broken API URL.
+The value must be the public URL of the separately deployed Flask backend. Do not use `localhost` in Netlify. If the variable is temporarily missing, the frontend still builds and uses its local fallback response service; configure the variable to enable the dataset-backed Flask responses in production.
 
 The backend can be run locally with `python backend/app.py` or deployed to a Python-capable service using `backend/requirements.txt` and the command `gunicorn --chdir backend app:app`.
 
