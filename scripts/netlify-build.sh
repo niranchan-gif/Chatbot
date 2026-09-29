@@ -16,4 +16,16 @@ fi
 export PATH="$FLUTTER_HOME/bin:$PATH"
 flutter config --enable-web
 flutter pub get
-flutter build web --release
+
+if [[ "${NETLIFY:-false}" == "true" && -z "${API_BASE_URL:-}" ]]; then
+  echo "API_BASE_URL must be configured in Netlify before deploying StudyMate."
+  echo "Example: https://your-studyMate-backend.example.com"
+  exit 1
+fi
+
+build_args=(--release)
+if [[ -n "${API_BASE_URL:-}" ]]; then
+  build_args+=("--dart-define=API_BASE_URL=${API_BASE_URL}")
+fi
+
+flutter build web "${build_args[@]}"
